@@ -106,7 +106,7 @@ public class MyLotteryWheel extends View {
     /**
      * 速度
      */
-    private int mSpeed = 5;
+    private double mSpeed = Speed.SLOW.getSpeed();
 
     /**
      * 奖品图片
@@ -116,6 +116,10 @@ public class MyLotteryWheel extends View {
      * 奖品名称
      */
     private String[] mGiftNames;
+    /**
+     * 中奖状态
+     */
+    private int[] mGiftStates;
 
 
     /**
@@ -136,7 +140,11 @@ public class MyLotteryWheel extends View {
         this.mGiftNames = mGiftNames;
     }
 
-    public void setSpeed(int mSpeed) {
+    public void setGiftStates(int[] mGiftStates) {
+        this.mGiftStates = mGiftStates;
+    }
+
+    public void setSpeed(double mSpeed) {
         this.mSpeed = mSpeed;
     }
 
@@ -159,7 +167,7 @@ public class MyLotteryWheel extends View {
         SWEEP_ANGLE = 360 / mGiftImgs.length;
         //奖品初始化
         for (int i = 0; i < mGiftImgs.length; i++) {
-            myGifts.add(new MyGift(BitmapFactory.decodeResource(getResources(), mGiftImgs[i]), mGiftNames[i]));
+            myGifts.add(new MyGift(BitmapFactory.decodeResource(getResources(), mGiftImgs[i]), mGiftNames[i], mGiftStates[i]));
         }
         initAnimation();
     }
@@ -175,11 +183,11 @@ public class MyLotteryWheel extends View {
             public void onAnimationUpdate(ValueAnimator animation) {
                 startAngle = (Integer) animation.getAnimatedValue();
                 long duration = animation.getDuration();
-                if (duration > mSpeed * 100 * 5) {
+                if (duration > mSpeed * 1000) {
                     animation.cancel();
                     stopRunning();
                 } else {
-                    animation.setDuration(duration + 2);
+                    animation.setDuration(duration + 1);
                     invalidate();
                 }
             }
@@ -187,9 +195,44 @@ public class MyLotteryWheel extends View {
         animator.setInterpolator(new LinearInterpolator());
         //animator.setInterpolator(new BounceInterpolator());
         //animator.setInterpolator(new AccelerateInterpolator());
-        animator.setDuration(mSpeed * 100 + (new Random().nextInt(100)));
+        animator.setDuration((long) (mSpeed * 100 + (new Random().nextInt(100))));
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(ValueAnimator.INFINITE);
+    }
+
+    /**
+     * 速度快慢代表转盘总的持续时间
+     */
+    public enum Speed {
+        /**
+         * 快
+         */
+        FAST {
+            @Override
+            public double getSpeed() {
+                return 0.3;
+            }
+        },
+        /**
+         * 中等
+         */
+        MEDIUM {
+            @Override
+            public double getSpeed() {
+                return 0.6;
+            }
+        },
+        /**
+         * 慢
+         */
+        SLOW {
+            @Override
+            public double getSpeed() {
+                return 1.0;
+            }
+        };
+
+        public abstract double getSpeed();
     }
 
 

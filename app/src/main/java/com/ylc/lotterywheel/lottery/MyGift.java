@@ -11,10 +11,15 @@ public class MyGift {
     private String name;
     private int startAngle;
     private int endAngle;
+    /**
+     * 0代表没有中到,1代表中到
+     */
+    private int state;
 
-    MyGift(Bitmap bmp, String name) {
+    MyGift(Bitmap bmp, String name, int state) {
         this.bmp = bmp;
         this.name = name;
+        this.state = state;
     }
 
     @Override
@@ -24,6 +29,7 @@ public class MyGift {
                 ", name='" + name + '\'' +
                 ", startAngle=" + startAngle +
                 ", endAngle=" + endAngle +
+                ", state=" + state +
                 '}';
     }
 
@@ -57,5 +63,13 @@ public class MyGift {
 
     public void setEndAngle(int endAngle) {
         this.endAngle = endAngle;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }
