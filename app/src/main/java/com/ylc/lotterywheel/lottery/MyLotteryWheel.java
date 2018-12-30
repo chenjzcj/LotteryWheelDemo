@@ -184,8 +184,7 @@ public class MyLotteryWheel extends View {
                 startAngle = (Integer) animation.getAnimatedValue();
                 long duration = animation.getDuration();
                 if (duration > mSpeed * 1000) {
-                    animation.cancel();
-                    stopRunning();
+                    startOrStopRunning();
                 } else {
                     animation.setDuration(duration + 1);
                     invalidate();
@@ -272,7 +271,6 @@ public class MyLotteryWheel extends View {
                 break;
             }
         }
-        mRunning = false;
     }
 
     /**
